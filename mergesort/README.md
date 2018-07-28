@@ -5,6 +5,7 @@ Merge Sort is a Divide and Conquer algorithm. It divides input array in two halv
 
 #### Pseudocode
 
+```
 mergesort(array)
     if length of array > 1:
          sort(1st half), mergeSort(2nd half)
@@ -26,3 +27,4 @@ mergesort(array)
      c += remainder of b
 
     return c
+```
