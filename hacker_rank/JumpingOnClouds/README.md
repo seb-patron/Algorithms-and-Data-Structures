@@ -27,7 +27,8 @@ Print the minimum number of jumps needed to win the game.
 ```
 #### Explanation 0: 
 >Emma must avoid  and . She can win the game with a minimum of  jumps:
->jump(2).png
+
+![alt text](https://github.com/seb-patron/Algorithms-and-Data-Structures/blob/master/hacker_rank/JumpingOnClouds/img0.png "Cloud Example 0")
 
 #### Sample Input 1
 ```
@@ -42,4 +43,5 @@ Print the minimum number of jumps needed to win the game.
 
 #### Explanation 1: 
 The only thundercloud to avoid is . Emma can win the game in  jumps:
-jump(5).png
+
+![alt text](https://github.com/seb-patron/Algorithms-and-Data-Structures/blob/master/hacker_rank/JumpingOnClouds/img1.png "Cloud Example 1")
