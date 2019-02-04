@@ -23,10 +23,6 @@ class RepeatedString(unittest.TestCase):
         ans = (a_count*ans) + remainder_count
         return (ans)
 
-    # def testFunction(self):
-    #     self.assertEqual(self.repeatedString('gfcaaaecbg', 547602), 164280)
-    #     print (self.repeatedString('epsxyyflvrrrxzvnoenvpegvuonodjoxfwdmcvwctmekpsnamchznsoxaklzjgrqruyzavshfbmuhdwwmpbkwcuomqhiyvuztwvq', 549382313570))
-
 
 class testRepeatedString(unittest.TestCase):
     
