@@ -5,37 +5,39 @@ import unittest
 import sys
 from pathlib import Path
 
-def quicksort(arr):
-    if len(arr) <= 1: return arr
 
-    pivot = choose_pivot(arr)
+def sort(arr):
+    return quicksort(arr, 0, len(arr)-1)
 
-    arr, pivot = partition(arr, pivot, len(arr))
-    length = len(arr)
+def quicksort(arr, left, right):
 
+    if left < right: 
 
-    left_arr = quicksort( arr[: pivot] )
-    right_arr = quicksort( arr[pivot : ] )
+        pivot = partition(arr, left, right)
 
-    return left_arr + right_arr
+        left_arr = quicksort( arr, left, pivot-1 )
+        right_arr = quicksort( arr, pivot+1, right)
+
+    return arr
 
 def choose_pivot(arr):
-    return 0
+    return len(arr)
 
 def partition(arr, left, right):
-    pivot = arr[left]
+    pivot = arr[right]
 
-    i = left + 1
+    i = left - 1
 
-    for j in range(left+1, right):
+    for j in range(left, right):
 
-        if arr[j] < pivot:
-            arr[j], arr[i] = arr[i], arr[j]
+        if arr[j] <= pivot:
             i+=1
+            arr[j], arr[i] = arr[i], arr[j]
+            # i+=1
 
-    arr[left], arr[i-1] = arr[i-1], arr[left]
+    arr[right], arr[i+1] = arr[i+1], arr[right]
 
-    return arr, i
+    return i+1
 
 
 
@@ -43,16 +45,16 @@ def partition(arr, left, right):
 class TestQuicksort(unittest.TestCase):
     
     def test_one(self):
-        self.assertListEqual( quicksort([1,2,3,4,5]), [1,2,3,4,5] )
+        self.assertListEqual( sort([1,2,3,4,5]), [1,2,3,4,5] )
 
     def test_two(self):
-        self.assertListEqual( quicksort([5,4,3,2,1]), [1,2,3,4,5] )
+        self.assertListEqual( sort([5,4,3,2,1]), [1,2,3,4,5] )
 
     def test_three(self):
-        self.assertListEqual( quicksort([10, 80, 30, 90, 40, 50, 70]), [10, 30, 40, 50, 70, 80, 90] )
+        self.assertListEqual( sort([10, 80, 30, 90, 40, 50, 70]), [10, 30, 40, 50, 70, 80, 90] )
 
     def test_four(self):
-        self.assertListEqual( quicksort([10,0,30,-50,1]), [-50,0,1,10,30] )
+        self.assertListEqual( sort([10,0,30,-50,1]), [-50,0,1,10,30] )
 
 
 if __name__ == "__main__":
