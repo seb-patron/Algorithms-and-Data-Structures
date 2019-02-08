@@ -1,4 +1,4 @@
-# Problem: Repeated 
+# Problem: First Non Repeated Char In String
 
 **Note: Write a solution that only iterates over the string once and uses O(1) additional memory, since this is what you would be asked to do during a real interview.**
 
