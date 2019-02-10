@@ -1,3 +1,7 @@
+import unittest
+import sys
+from pathlib import Path
+
 class Node:
     def __init__(self, data=None, next_node=None):
         self.data = data
@@ -23,6 +27,7 @@ class LinkedList:
         self.head = new_node
         self.size += 1
 
+    # searches for specific value in the linkedlist
     def search(self, data):
         current_node = self.head
 
@@ -34,6 +39,19 @@ class LinkedList:
                 current_node = current_node.get_next()
 
         return None #we didnt find our value
+
+    def value_at(self, n):
+        current_node = self.head
+
+        # while there are still nodes and we have not found our node...
+        for i in range(0, n):
+            if i == n-1:
+                return current_node
+            else:
+                current_node = current_node.get_next()
+
+        return None #we didnt find our value
+
 
     # The delete method traverses the list in the same way that 
     # search does, but in addition to keeping track of the current 
@@ -67,14 +85,58 @@ class LinkedList:
             current_node = current_node.get_next()
 
 
-linked_list = LinkedList()
-linked_list.insert(1)
-linked_list.insert(2)
-linked_list.insert(3)
+class TestBinaryStringAdd(unittest.TestCase):
 
-print (linked_list.search(1).get_data())
-linked_list.print_list()
-print (linked_list.size)
-linked_list.delete(2)
-linked_list.print_list()
-print (linked_list.size)
+    def setup_list(self):
+        linked_list = LinkedList()
+        linked_list.insert('1')
+        linked_list.insert('2')
+        linked_list.insert('3')
+        return linked_list
+    
+    def test_one(self):
+        linked_list = self.setup_list()
+        self.assertEqual(linked_list.value_at(1).get_data(), '3' )
+
+    def test_two(self):
+        linked_list = self.setup_list()
+        self.assertEqual(linked_list.value_at(2).get_data(), '2' )
+
+    def test_three(self):
+        linked_list = self.setup_list()
+        self.assertEqual(linked_list.value_at(3).get_data(), '1' )
+    
+    def test_four(self):
+        linked_list = self.setup_list()
+        self.assertEqual(linked_list.size, 3 )
+
+    def test_five(self):
+        linked_list = self.setup_list()
+        linked_list.delete(2)
+        self.assertEqual(linked_list.value_at(1).get_data(), '3' )
+
+    def test_six(self):
+        linked_list = self.setup_list()
+        linked_list.delete('2')
+        self.assertEqual(linked_list.value_at(2).get_data(), '1' )
+
+    def test_seven(self):
+        linked_list = self.setup_list()
+        linked_list.delete('2')
+        self.assertEqual(linked_list.size, 2 )
+
+
+
+if __name__ == "__main__":
+    file = Path(__file__).resolve()
+    parent, top = file.parent, file.parents[2]
+
+    sys.path.append(str(top))
+    try:
+        sys.path.remove(str(parent))
+    except ValueError: # Already removed
+        pass
+
+    __package__ = 'linkedlist.tests'
+
+    unittest.main()
