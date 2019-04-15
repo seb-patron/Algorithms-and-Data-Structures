@@ -1,4 +1,4 @@
-#Min Heap
+# Min Heap
 
 A Min Heap is a special tree structure in which each parent node is less than or equal to its child node. 
 
