@@ -27,39 +27,25 @@ class Codec:
 
         output = []
         output.append(root.val)
+        string = ""
         
         # BFS using a deque as a queue
         # Add each root to the queue
         # then explore children, adding them to the queue and to the output list
         # once all children were explored, pop next item in queue and use it as current root 
-
-        
         while queue: # while queue is not empty
-            current_node = queue.pop()
-            
-            if current_node.left != None:
-                queue.appendleft(current_node.left)
-                output.append(current_node.left.val)
-            else:
-                output.append(None)
-                output.append(None)
+            current_node = queue.popleft()
+
+            if not current_node:
+                string += "None,"
                 continue
+            else:
+                string +=  str(current_node.val) + ","
+                queue.append(current_node.left)
+                queue.append(current_node.right)
 
-            if current_node.right != None:
-                queue.appendleft(current_node.right)
-                output.append(current_node.right.val)
+        return string.rstrip(",")
 
-
-        # trim remaining Nones from output since we know that they are right children
-        # and we don't need to explicitly state that
-        for i in range (len(output)-1, -1, -1):
-            if output[i] == None:
-                del output[-1]
-            else: 
-                return "[" + ",".join(str(x) for x in output) + "]"
-
-        return "[" + ",".join(str(x) for x in output) + "]"
-        
         
 
     def deserialize(self, data):
@@ -68,27 +54,28 @@ class Codec:
         :type data: str
         :rtype: TreeNode
         """
-        ls = data[1:-1].split(",") # convert string to list
+        data = collections.deque(data.split(",")) # convert string to list
+        val = data.popleft()
+        root = None if val == "None" else TreeNode(int(val))
+
         queue = collections.deque()
-        current_node = TreeNode(int(ls.pop(0)))
-        root = current_node
-        queue.appendleft(current_node)
+        queue.appendleft(root)
 
-        while queue and len(ls) > 0:
+        while queue and len(data) > 0:
 
-            left = (ls.pop(0))
-            if left is None:
-                left = int(left)
-                current_node.left = TreeNode(left)
-                queue.appendleft(current_node.left)
-            if len(ls) > 0:
-                right = ls.pop(0)
-                if right is None:
-                    right = int(right)
-                    current_node.right = TreeNode(right)
-                    queue.appendleft(current_node.right)
 
-            current_node = queue.pop()
+            current_node = queue.popleft()
+
+            if current_node:
+
+                left = data.popleft()
+                current_node.left = TreeNode(int(left)) if left != "None" else None
+                queue.append(current_node.left)
+
+                if len(data) > 0:
+                    right = data.popleft()
+                    current_node.right = TreeNode(int(right)) if right != "None" else None
+                    queue.append(current_node.right)
 
         return root
         
@@ -118,7 +105,7 @@ class TestSerializeBinaryTree(unittest.TestCase):
     def test_one(self):
         root = self.setup_binary_tree()
         c = Codec()
-        self.assertEqual( c.serialize(root), "[1,2,3,None,None,4,5]" )
+        self.assertEqual( c.serialize(root), "1,2,3,None,None,4,5,None,None,None,None" )
 
     def test_two(self):
         root = self.setup_binary_tree()
@@ -131,9 +118,24 @@ class TestSerializeBinaryTree(unittest.TestCase):
         c = Codec()
         serialized_tree = c.serialize(root)
         root = c.deserialize(serialized_tree)
-        print (root.val, type(root))
-        print (root.right.left)
-        self.assertEqual( root.left.val, 2 )
+        left = root.left
+        self.assertEqual( left.val, 2 )
+
+    def test_four(self):
+        root = self.setup_binary_tree()
+        c = Codec()
+        serialized_tree = c.serialize(root)
+        root = c.deserialize(serialized_tree)
+        right = root.right
+        self.assertEqual( right.val, 3 )
+
+    def test_five(self):
+        root = self.setup_binary_tree()
+        c = Codec()
+        serialized_tree = c.serialize(root)
+        root = c.deserialize(serialized_tree)
+        right = root.right
+        self.assertEqual( right.right.val, 5 )
 
     def test_six(self):
         root = self.setup_binary_tree()
@@ -141,7 +143,7 @@ class TestSerializeBinaryTree(unittest.TestCase):
         self.assertEqual( c.deserialize(c.serialize(root)).val, 1 )
 
     def test_seven(self):
-        ls = "[1,2]"
+        ls = "1,2"
         c = Codec()
         self.assertEqual( c.deserialize(ls).val, 1 )
 
