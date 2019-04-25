@@ -25,8 +25,6 @@ class Codec:
         queue = collections.deque()
         queue.appendleft(root)
 
-        output = []
-        output.append(root.val)
         string = ""
         
         # BFS using a deque as a queue
