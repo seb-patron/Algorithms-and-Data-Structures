@@ -110,14 +110,9 @@ class SolutionHashing:
 class SolutionOptimal:
 
     def find_smallest_positive_int(self, nums):
-        print ("\n\n\ninput nums", nums)
         shift, nums = self.segregate(nums)
 
-
-        print ("shift", shift, "nums", nums)
         nums = nums[shift:]
-
-        print (nums)
 
         if len(nums) == 0: return 1
         if len(nums) == 1:
@@ -130,18 +125,20 @@ class SolutionOptimal:
                 largest_num = num
 
 
-        indexes = [-1] * len(nums)
+        indexes = [-1] * (len(nums)+1)
 
         for num in nums:
-            if num < len(nums) and num > 0:
+            if num < len(nums)+1 and num > 0:
                 indexes[num] = 1
 
+        # if we find an index thats negative, thats our missing number. return it
         for index in range(1, len(indexes)):
             if indexes[index] < 1:
                 print ("indexes at return", indexes, len(indexes))
                 return index
 
-        return len(indexes)
+        # otherwise all indexes are present, so return the index + 1
+        return index + 1
 
 
     # puts all non-positive  
@@ -150,12 +147,12 @@ class SolutionOptimal:
     def segregate(self, nums):
         i = 0
         neg_count = 0
-        for j in range (1, len(nums)):
-            if nums[j] < 0:
+        for j in range (0, len(nums)):
+            if nums[j] <= 0:
                 nums[j], nums[i] = nums[i], nums[j]
                 i +=1
                 neg_count +=1
-        if nums[-2] < 1: neg_count +=1
+        # if nums[-2] < 1: neg_count +=1
         return neg_count, nums
 
 
