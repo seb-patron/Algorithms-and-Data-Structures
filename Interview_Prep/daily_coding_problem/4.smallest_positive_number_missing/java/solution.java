@@ -21,20 +21,17 @@ class Solution {
         if (n == 0) {
             return 1;
         }
-        int k = partition(nums, n) + 1; //all negs should be at k+1..length
-        System.out.println(Arrays.toString(nums));
-        System.out.println("k="+ k);
+        int k = partition(nums, n); //all negs should be at k..length
         int temp = 0;
-        int first_missing_index = k;
+        int first_missing_index = k; // our first missing number is where our array becomes negative
         
         // if a number exists, set its index to negative 
         for (int i = 0; i < k; i++) {
             temp = Math.abs(nums[i]);
-            System.out.println(temp);
             if(temp<=k && temp != 0) {
-               nums[temp-1]=(nums[temp-1]<0)?nums[temp-1]:-nums[temp-1];
-               System.out.println("index  =" + (temp-1) + " value = " + nums[temp-1]);
-               }
+                if (nums[temp-1] < 0) nums[temp-1] = nums[temp-1];
+                else nums[temp-1] = -nums[temp-1];
+           }
             
         }
         
@@ -51,14 +48,15 @@ class Solution {
     }
     
     public int partition(int[] nums, int length) {
-        int j = 0;
-        for (int i = 0; i < length; i++) {
-           if (nums[i] > 0) {
-                swap(nums, i, j);
-                j++;
-           }
-       }
-        return j-1;
+          int j = 0;
+          for (int i = 0; i < length; i++) {
+               if (nums[i] > 0) {
+                    swap(nums, i, j);
+                    j++;
+               }
+          }
+          // at end of loop j will be index of first negative number
+          return j-1;
     }
     
     public void swap(int[] nums, int i, int j) {
@@ -69,17 +67,3 @@ class Solution {
         }
     }
 }
-
-
-
-
-// public class HelloWorld {
-//     public static void main(String[] args) {
-//           System.out.println("Hello World!");
-//           Solution solution = new Solution();
-//           int arr[] = {1,2,0};
-//           int x = solution.firstMissingPositive(arr);
-
-//           System.out.println(x);
-//     }
-// }
